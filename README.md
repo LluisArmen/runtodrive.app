@@ -37,9 +37,10 @@ img/            App screenshots
 
 ## Feedback
 
-`feedback.html` posts anonymously to PostHog. It sets no cookies, requires no account or
-email address, and generates a fresh random identifier per submission, so messages cannot
-be linked to each other or back to a sender.
+`feedback.html` opens a ticket in the PostHog Support inbox. It sets no cookies, requires no
+account or email address, and generates a fresh random identifier per submission, so messages
+cannot be linked to each other or back to a sender — which also means senders can't be replied
+to in-page.
 
 ## Deployment
 

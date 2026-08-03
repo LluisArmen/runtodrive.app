@@ -71,10 +71,11 @@
 </footer>
 
 <script>
-// PostHog ingestion endpoint. The project token is a public, write-only
-// ingestion identifier — safe to ship in a static page.
+// PostHog Support (conversations) intake. Each submission opens a ticket in the
+// Support inbox. The token is a public, write-only widget token — safe to ship
+// in a static page. Read from /array/<project_token>/config if it ever changes.
 const POSTHOG_HOST = "https://eu.i.posthog.com";
-const POSTHOG_TOKEN = "phc_nbbEvwJspbn4s69WKnu78rQHH7Gogfm4WtfzWQ7CYktK";
+const CONVERSATIONS_TOKEN = "dGVj_bCeO7bs0L_MS8fu8wFU4GRaD1kwX_H6fX3LyGo";
 const MAX_LENGTH = 2000;
 
 const form = document.getElementById("feedback-form");
@@ -108,26 +109,26 @@ form.addEventListener("submit", async (event) => {
   submit.disabled = true;
   setStatus("Sending…");
 
-  // A fresh random id per submission: no profile, no cross-submission linkage.
+  // A fresh random id per submission: no profile, no cross-submission linkage,
+  // nothing stored in the browser. The trade-off is that the sender can never
+  // be shown replies — which the page already promises.
   const distinctId = crypto.randomUUID
     ? crypto.randomUUID()
     : "anon-" + Date.now() + "-" + Math.random().toString(36).slice(2);
 
   try {
-    const response = await fetch(POSTHOG_HOST + "/i/v0/e/", {
+    const response = await fetch(POSTHOG_HOST + "/api/conversations/v1/widget/message", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Conversations-Token": CONVERSATIONS_TOKEN
+      },
       body: JSON.stringify({
-        api_key: POSTHOG_TOKEN,
-        event: "website_feedback_submitted",
-        distinct_id: distinctId,
-        properties: {
-          $process_person_profile: false,
-          source: "landing_page",
-          topic: topic.value,
-          message: text,
-          message_length: text.length
-        }
+        message: "Topic: " + topic.value + "\n\n" + text,
+        traits: { name: null, email: null },
+        ticket_id: null,
+        widget_session_id: distinctId,
+        distinct_id: distinctId
       })
     });
     if (!response.ok) throw new Error("HTTP " + response.status);
