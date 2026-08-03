@@ -1,6 +1,6 @@
-# runtodrive.app
+# RunToDrive
 
-The marketing website for **RunToDrive**, a fitness-powered racing career game for iPhone
+The landing page for **RunToDrive**, a fitness-powered racing career game for iPhone
 and Apple Watch.
 
 ## About the app
@@ -34,11 +34,6 @@ style.css       Shared styles
 img/            App screenshots
 ```
 
-## Local preview
-
-```sh
-python3 -m http.server 8000   # then open http://localhost:8000
-```
 
 ## Feedback
 
