@@ -80,6 +80,12 @@ a:hover { text-decoration: underline; }
 .btn-primary { background: var(--accent); color: #081722; }
 .btn-ghost { background: transparent; color: var(--text); border-color: rgba(255, 255, 255, 0.18); }
 
+/* Apple-supplied badge art: never restyle it, only size it.
+   Clear space is Apple's required 10% of badge height. */
+.badge-appstore { display: inline-block; padding: 5px; transition: transform 0.15s ease; }
+.badge-appstore:hover { transform: translateY(-2px); }
+.badge-appstore img { display: block; height: 50px; width: auto; }
+
 /* ---------- hero ---------- */
 .hero {
   position: relative;
