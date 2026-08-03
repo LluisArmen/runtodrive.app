@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback — RunToDrive</title>
+<meta name="description" content="Tell us what's working, what's broken and what's missing. Anonymous, no account needed.">
+<meta name="theme-color" content="#0b0d12">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">Run<span>To</span>Drive</a>
+    <a class="link" href="privacy.html">Privacy</a>
+    <a class="link" href="terms.html">Terms</a>
+  </div>
+</header>
+
+<main class="wrap form">
+
+  <h1>Send feedback</h1>
+  <p class="lede" style="font-size:18px">
+    Anonymous, no account, no email required. Tell us what's working, what's broken, and what
+    you wish the game did.
+  </p>
+
+  <div class="callout">
+    <p>
+      This form doesn't set cookies and doesn't record who you are. Because it's fully anonymous,
+      we can't reply — so please don't include personal details you'd want removed later.
+    </p>
+  </div>
+
+  <form id="feedback-form" novalidate>
+    <div class="field">
+      <label for="topic">What's this about?</label>
+      <select id="topic" name="topic">
+        <option value="general">General feedback</option>
+        <option value="bug">Something is broken</option>
+        <option value="idea">Feature idea</option>
+        <option value="gameplay">Gameplay &amp; balance</option>
+        <option value="health_data">Workouts &amp; health data</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="message">Your feedback <span class="hint">— required</span></label>
+      <textarea id="message" name="message" rows="8" maxlength="2000"
+                placeholder="The more specific, the more useful. What were you doing, and what did you expect to happen?"
+                required></textarea>
+      <div class="counter"><span id="count">0</span> / 2000</div>
+    </div>
+
+    <button class="btn btn-primary" type="submit" id="submit">Send feedback</button>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </form>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© 2026 RunToDrive</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+// PostHog ingestion endpoint. The project token is a public, write-only
+// ingestion identifier — safe to ship in a static page.
+const POSTHOG_HOST = "https://eu.i.posthog.com";
+const POSTHOG_TOKEN = "phc_nbbEvwJspbn4s69WKnu78rQHH7Gogfm4WtfzWQ7CYktK";
+const MAX_LENGTH = 2000;
+
+const form = document.getElementById("feedback-form");
+const message = document.getElementById("message");
+const topic = document.getElementById("topic");
+const submit = document.getElementById("submit");
+const status = document.getElementById("status");
+const count = document.getElementById("count");
+
+message.addEventListener("input", () => { count.textContent = message.value.length; });
+
+function setStatus(text, kind) {
+  status.textContent = text;
+  status.className = "status" + (kind ? " " + kind : "");
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const text = message.value.trim();
+  if (!text) {
+    setStatus("Please write something first.", "err");
+    message.focus();
+    return;
+  }
+  if (text.length > MAX_LENGTH) {
+    setStatus("That's longer than " + MAX_LENGTH + " characters. Please trim it down.", "err");
+    return;
+  }
+
+  submit.disabled = true;
+  setStatus("Sending…");
+
+  // A fresh random id per submission: no profile, no cross-submission linkage.
+  const distinctId = crypto.randomUUID
+    ? crypto.randomUUID()
+    : "anon-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+
+  try {
+    const response = await fetch(POSTHOG_HOST + "/i/v0/e/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: POSTHOG_TOKEN,
+        event: "website_feedback_submitted",
+        distinct_id: distinctId,
+        properties: {
+          $process_person_profile: false,
+          source: "landing_page",
+          topic: topic.value,
+          message: text,
+          message_length: text.length
+        }
+      })
+    });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    form.reset();
+    count.textContent = "0";
+    setStatus("Thank you — your feedback landed. It genuinely shapes what we build next.", "ok");
+  } catch (error) {
+    // support@runtodrive.app only works once the runtodrive.app domain is registered
+    // with a live mailbox. Until then this fallback points nowhere — keep it in sync
+    // with the contact address used in privacy.html and terms.html.
+    setStatus("That didn't send. Check your connection and try again, or email support@runtodrive.app.", "err");
+  } finally {
+    submit.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>
