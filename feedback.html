@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Feedback — RunToDrive</title>
 <meta name="description" content="Tell us what's working, what's broken and what's missing. Anonymous, no account needed.">
-<meta name="theme-color" content="#0b0d12">
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#081722">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -136,10 +136,8 @@ form.addEventListener("submit", async (event) => {
     count.textContent = "0";
     setStatus("Thank you — your feedback landed. It genuinely shapes what we build next.", "ok");
   } catch (error) {
-    // support@runtodrive.app only works once the runtodrive.app domain is registered
-    // with a live mailbox. Until then this fallback points nowhere — keep it in sync
-    // with the contact address used in privacy.html and terms.html.
-    setStatus("That didn't send. Check your connection and try again, or email support@runtodrive.app.", "err");
+    // Keep in sync with the contact address used in privacy.html and terms.html.
+    setStatus("That didn't send. Check your connection and try again, or email runtodrive.app@gmail.com.", "err");
   } finally {
     submit.disabled = false;
   }
