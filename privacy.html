@@ -21,13 +21,15 @@
 <main class="wrap prose">
 
 <h1>Privacy Policy</h1>
-<p class="updated">Last updated: 3 August 2026</p>
+<p class="updated">Last updated: 6 August 2026</p>
 
 <div class="callout">
   <p>
     <strong>The short version.</strong> Your health and workout data stays on your device and is
-    used only to power your progress in the game. We never sell it, never advertise against it,
-    and never share it with data brokers. Analytics are anonymous by default.
+    used only to power your progress in the game. The one exception is if you create an account:
+    your career — including the workout metrics behind it — is then backed up to our EU server so
+    you can restore it after a reinstall, and only you can read it. We never sell it, never
+    advertise against it, and never share it with data brokers.
   </p>
 </div>
 
@@ -46,10 +48,13 @@
   <li>Walking and running distance</li>
   <li>Cycling distance</li>
   <li>Active energy burned</li>
+  <li>Heart rate, used to score the effort of a session you tracked in the App</li>
 </ul>
 <p>
   This data is used for one purpose: converting your real-world effort into in-game progression
-  (driver XP, resource points, energy and season objectives). It is stored locally on your device.
+  (driver XP, resource points, energy and season objectives). It is stored locally on your device,
+  and — if you create an account — included in your cloud backup so your career survives a
+  reinstall (see <a href="#account">section 3</a>).
 </p>
 <p>
   We do <strong>not</strong> use health data for advertising or marketing, we do <strong>not</strong>
@@ -71,23 +76,49 @@
   unrelated to measuring the workout you started.
 </p>
 
-<h2>3. Account data</h2>
+<h2 id="account">3. Account data and cloud save</h2>
 <p>
-  If you create an account, we store an email address and an account identifier with our backend
-  provider so your progress can be restored and synced across your devices. Authentication
-  credentials are handled by our authentication provider and access tokens are stored in the iOS
-  Keychain — never in plain files or logs.
+  You can use the App without an account. <strong>Without an account, nothing about your career or
+  your workouts leaves your device.</strong>
 </p>
 <p>
-  You can use the App without an account; in that case your progress remains only on your device.
+  If you create an account, we store your email address and an account identifier with
+  <strong>Supabase</strong> (EU-hosted), our authentication and database provider. Authentication
+  credentials are handled by that provider, and access tokens are stored in the iOS Keychain —
+  never in plain files or logs.
+</p>
+<p>
+  Creating an account also enables <strong>cloud save</strong>: a backup of your career is uploaded
+  to your own row in our database, so you can restore it if you reinstall the App or change device.
+  It contains:
+</p>
+<ul>
+  <li>Game state — race results and their event logs, garage and upgrades, energy, season progress,
+      XP and levels, and your cosmetic choices</li>
+  <li>Your display name, onboarding status and preferred activity</li>
+  <li>The <strong>workout metrics</strong> your progression was calculated from: activity type,
+      start and end time, duration, distance, active energy, <strong>average heart rate</strong>,
+      step count and elevation gain — plus your benchmark results</li>
+</ul>
+<p>
+  Workout <em>routes and GPS coordinates are never uploaded</em>, and neither is anything from your
+  Health records beyond the metrics listed above. The backup is written when you create your
+  account and refreshed when you leave the App; it is transmitted over TLS and protected by
+  row-level security, so no other user — and no unauthenticated request — can read it. It is a
+  backup only: gameplay always runs from the copy on your device.
+</p>
+<p>
+  Deleting your account in <em>Account → Delete Account</em> deletes the account and its cloud save
+  immediately (see <a href="#retention">Retention</a>).
 </p>
 
 <h2>4. Analytics</h2>
 <p>
   We use <strong>PostHog</strong> (EU-hosted) to understand how the App is used so we can improve
-  it. Analytics are <strong>anonymous by default</strong> — events are not tied to your real
-  identity, and we do not enable session recording, autocapture, screen recording or advertising
-  identifiers.
+  it. Events are tied to a randomly generated player identifier — never to your name, your email
+  address or a device or advertising identifier — so we can tell one player's journey from
+  another's without knowing who you are. IP-based geolocation is disabled on every event, and we
+  do not enable session recording, autocapture or screen recording.
 </p>
 <p>
   We record a small, fixed vocabulary of product events, such as: app opened, onboarding started
@@ -104,13 +135,7 @@
   used solely to fix defects.
 </p>
 
-<h2>6. Game Center</h2>
-<p>
-  If you sign in to Game Center, Apple provides us with a player identifier used for leaderboards
-  and achievements. Your handling of Game Center data is governed by Apple's privacy policy.
-</p>
-
-<h2>7. Feedback sent through this website</h2>
+<h2>6. Feedback sent through this website</h2>
 <p>
   The <a href="feedback.html">feedback page</a> submits your message anonymously to PostHog. We do
   not ask for, or attach, your name, email address or IP-based identity, and no tracking cookie is
@@ -118,7 +143,7 @@
   anonymous, we have no way to link a request back to you in order to delete it.
 </p>
 
-<h2>8. What we do not do</h2>
+<h2>7. What we do not do</h2>
 <ul>
   <li>No advertising, and no advertising SDKs</li>
   <li>No selling or sharing of personal data with data brokers</li>
@@ -126,58 +151,62 @@
   <li>No use of health data for anything other than your in-game progression</li>
 </ul>
 
-<h2>9. Where your data is processed</h2>
+<h2>8. Where your data is processed</h2>
 <table>
   <tr><th>Provider</th><th>Purpose</th><th>Region</th></tr>
   <tr><td>On your device</td><td>Health, workout, location and game data</td><td>Your device</td></tr>
-  <tr><td>Supabase</td><td>Account, sync and backup</td><td>EU</td></tr>
-  <tr><td>PostHog</td><td>Anonymous product analytics and feedback</td><td>EU</td></tr>
+  <tr><td>Supabase</td><td>Account, and cloud backup of your career including workout metrics</td><td>EU</td></tr>
+  <tr><td>PostHog</td><td>Pseudonymous product analytics and anonymous feedback</td><td>EU</td></tr>
   <tr><td>Google (Firebase Crashlytics)</td><td>Crash diagnostics</td><td>US / global</td></tr>
-  <tr><td>Apple</td><td>App distribution, Health, Game Center</td><td>Global</td></tr>
+  <tr><td>Apple</td><td>App distribution and Health</td><td>Global</td></tr>
 </table>
 
-<h2>10. Retention</h2>
+<h2 id="retention">9. Retention</h2>
 <p>
-  Data on your device is kept until you delete the App or clear it in-app. Account and sync data is
-  kept while your account exists and is deleted on request. Analytics events are retained in
+  Data on your device is kept until you delete the App or clear it in-app. Your account and its
+  cloud save are kept for as long as the account exists; one backup is stored per account and each
+  upload replaces the previous one, so we keep no history of past saves. Deleting your account —
+  in the App under <em>Account → Delete Account</em>, or by emailing us — deletes the account and
+  its cloud save together, immediately and permanently. Analytics events are retained in
   aggregate for product analysis. Crash reports are retained according to Firebase's default
   retention period.
 </p>
 
-<h2>11. Your rights</h2>
+<h2>10. Your rights</h2>
 <p>
   If you are in the EEA or UK, the GDPR gives you the right to access, correct, export, restrict
   and delete your personal data, and to object to processing. Our legal basis is your consent (for
-  Health, location and account creation) and our legitimate interest in maintaining and improving
-  the App (for anonymous analytics and crash diagnostics).
+  Health, location, account creation and the cloud backup that comes with it) and our legitimate
+  interest in maintaining and improving the App (for pseudonymous analytics and crash diagnostics).
 </p>
 <p>
-  To exercise any of these rights, or to request account deletion, email
+  You can delete your account and its cloud save yourself at any time, in the App under
+  <em>Account → Delete Account</em>. To exercise any other right, email
   <a href="mailto:runtodrive.app@gmail.com">runtodrive.app@gmail.com</a>. We'll respond within 30 days.
   You also have the right to complain to your local data protection authority.
 </p>
 
-<h2>12. Children</h2>
+<h2>11. Children</h2>
 <p>
   RunToDrive is not directed at children under 13, and we do not knowingly collect personal data
   from them. If you believe a child has provided us with personal data, contact us and we will
   delete it.
 </p>
 
-<h2>13. Security</h2>
+<h2>12. Security</h2>
 <p>
   Data in transit is encrypted with TLS. Access tokens are stored in the iOS Keychain. Backend data
   is protected with row-level security so a user can only reach their own records. No system is
   perfectly secure, but we take reasonable measures appropriate to the sensitivity of the data.
 </p>
 
-<h2>14. Changes</h2>
+<h2>13. Changes</h2>
 <p>
   We'll update this page when the App changes, and revise the “last updated” date above. Material
   changes will be announced in the App.
 </p>
 
-<h2>15. Contact</h2>
+<h2>14. Contact</h2>
 <p>
   Questions about this policy: <a href="mailto:runtodrive.app@gmail.com">runtodrive.app@gmail.com</a>.
 </p>
