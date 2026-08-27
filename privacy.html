@@ -21,15 +21,19 @@
 <main class="wrap prose">
 
 <h1>Privacy Policy</h1>
-<p class="updated">Last updated: 6 August 2026</p>
+<p class="updated">Last updated: 26 August 2026</p>
 
 <div class="callout">
   <p>
     <strong>The short version.</strong> Your health and workout data stays on your device and is
     used only to power your progress in the game. The one exception is if you create an account:
     your career — including the workout metrics behind it — is then backed up to our EU server so
-    you can restore it after a reinstall, and only you can read it. We never sell it, never
-    advertise against it, and never share it with data brokers.
+    you can restore it after a reinstall, and only you can read it. We also ask, when you set the
+    App up, whether you're willing to share <strong>anonymous usage data</strong> — which screens
+    and actions people use, so we can see where the App is confusing. It's off unless you say yes,
+    you can change your mind at any time, and it never includes anything from Apple Health. Crash
+    reports are on by default so we can fix what breaks. We never sell any of it, never advertise
+    against it, and never share it with data brokers.
   </p>
 </div>
 
@@ -114,18 +118,36 @@
 
 <h2>4. Analytics</h2>
 <p>
-  We use <strong>PostHog</strong> (EU-hosted) to understand how the App is used so we can improve
-  it. Events are tied to a randomly generated player identifier — never to your name, your email
-  address or a device or advertising identifier — so we can tell one player's journey from
-  another's without knowing who you are. IP-based geolocation is disabled on every event, and we
-  do not enable session recording, autocapture or screen recording.
+  <strong>Analytics is off by default.</strong> During setup the App asks you, in plain terms,
+  whether you're willing to share anonymous usage data. Nothing is sent, and no analytics
+  identifier is stored on your device, unless you say yes. You can turn it on or off at any time
+  in <em>Account → Anonymous usage data</em>; turning it off stops collection from that moment.
+  Declining is a real answer — the App works exactly the same either way.
+</p>
+<p>
+  If you turn it on, we use <strong>PostHog</strong> (EU-hosted) to understand how the App is used
+  so we can improve it. The events are <strong>anonymous</strong>: we do not create a profile for
+  you and we never connect them to your account, your name or your email address. PostHog does
+  store a random identifier on your device so that repeat use can be counted as one player rather
+  than many; it is not a device or advertising identifier, and reinstalling the App replaces it
+  with a new one. IP-based geolocation is disabled on every event, and we do not enable session
+  recording, autocapture or screen recording.
 </p>
 <p>
   We record a small, fixed vocabulary of product events, such as: app opened, onboarding started
-  and completed, workout import completed, training started or completed, engineering project
-  started or completed, race completed, and season started. These events carry the context needed
-  to interpret them (for example, which onboarding step, or whether an import succeeded) — never
-  the contents of your health records.
+  and completed, the outcome of the Health access request, workout import started, completed or
+  failed, reward screen viewed, engineering screen entered, engineering project started, and
+  whether the core gameplay loop was completed and later repeated. Each carries only the context
+  needed to interpret it, always from a fixed list of values — for example which onboarding step,
+  or whether an import found anything new. Alongside them we send your app version and build, the
+  App's own schema version, whether the build is a production or internal one, and your country
+  (a two-letter code taken from your device's Language &amp; Region setting — never a city,
+  coordinate or time zone, and never inferred from your IP address).
+</p>
+<p>
+  What is <strong>never</strong> sent to analytics: anything from Apple Health, workout type,
+  dates, durations, distances, pace, calories or heart rate, routes or location, the points a
+  workout earned, your name, email address or display name, free text, and raw error messages.
 </p>
 
 <h2>5. Crash reports</h2>
@@ -156,7 +178,7 @@
   <tr><th>Provider</th><th>Purpose</th><th>Region</th></tr>
   <tr><td>On your device</td><td>Health, workout, location and game data</td><td>Your device</td></tr>
   <tr><td>Supabase</td><td>Account, and cloud backup of your career including workout metrics</td><td>EU</td></tr>
-  <tr><td>PostHog</td><td>Pseudonymous product analytics and anonymous feedback</td><td>EU</td></tr>
+  <tr><td>PostHog</td><td>Anonymous product analytics (only if you opt in) and anonymous feedback</td><td>EU</td></tr>
   <tr><td>Google (Firebase Crashlytics)</td><td>Crash diagnostics</td><td>US / global</td></tr>
   <tr><td>Apple</td><td>App distribution and Health</td><td>Global</td></tr>
 </table>
@@ -168,7 +190,8 @@
   upload replaces the previous one, so we keep no history of past saves. Deleting your account —
   in the App under <em>Account → Delete Account</em>, or by emailing us — deletes the account and
   its cloud save together, immediately and permanently. Analytics events are retained in
-  aggregate for product analysis. Crash reports are retained according to Firebase's default
+  aggregate for product analysis, and are not linked to your account, so they cannot be traced
+  back to you individually. Crash reports are retained according to Firebase's default
   retention period.
 </p>
 
@@ -176,8 +199,9 @@
 <p>
   If you are in the EEA or UK, the GDPR gives you the right to access, correct, export, restrict
   and delete your personal data, and to object to processing. Our legal basis is your consent (for
-  Health, location, account creation and the cloud backup that comes with it) and our legitimate
-  interest in maintaining and improving the App (for pseudonymous analytics and crash diagnostics).
+  Health, location, account creation and the cloud backup that comes with it, and for analytics —
+  which is why analytics is off until you choose to turn it on, and can be switched off again just
+  as easily) and our legitimate interest in keeping the App working (for crash diagnostics).
 </p>
 <p>
   You can delete your account and its cloud save yourself at any time, in the App under
